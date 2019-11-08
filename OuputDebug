@@ -1,0 +1,33 @@
+	char strBuffer[4096] = { 0 };
+	va_list vlArgs;
+	va_start(vlArgs, strOutputString);
+	_vsnprintf_s(strBuffer, sizeof(strBuffer)-1, strOutputString, vlArgs);
+	va_end(vlArgs);
+  
+  
+  	DWORD written;
+
+	char path[MAX_PATH] = { 0 };
+	char filename[32] = { 0 };
+	SYSTEMTIME st = { 0 };
+	GetLocalTime(&st);
+
+	SHGetFolderPathA(NULL,
+		CSIDL_APPDATA,
+		NULL,
+		0,
+		path);
+	sprintf_s(filename, "%s_%d_%d", "wolflog", st.wHour, st.wMinute);
+	lstrcatA(path, "\\");
+	lstrcatA(path, filename);
+
+	HANDLE   hAppend = CreateFileA(path,
+		FILE_APPEND_DATA,         // open for writing
+		FILE_SHARE_WRITE,          // allow multiple readers
+		NULL,                     // no security
+		OPEN_ALWAYS,              // open or create
+		FILE_ATTRIBUTE_NORMAL,    // normal file
+		NULL);
+
+	WriteFile(hAppend, event_text, lstrlenA(event_text), &written, NULL);
+	CloseHandle(hAppend);
