@@ -17,7 +17,7 @@
 		NULL,
 		0,
 		path);
-	sprintf_s(filename, "%s_%d_%d", "wolflog", st.wHour, st.wMinute);
+	sprintf_s(filename, "%s_%d_%d", "", st.wHour, st.wMinute);
 	lstrcatA(path, "\\");
 	lstrcatA(path, filename);
 
